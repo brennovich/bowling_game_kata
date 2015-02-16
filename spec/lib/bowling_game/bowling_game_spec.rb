@@ -70,12 +70,12 @@ RSpec.describe BowlingGame do
       end
     end
 
-    # context 'when perfect game (strikes all frames)' do
-    #   before { roll_many 12, 10 }
+    context 'when perfect game (strikes all frames)' do
+      before { roll_many 12, 10 }
 
-    #   it 'returns max score' do
-    #     expect(game.score).to eq 300
-    #   end
-    # end
+      it 'returns max score' do
+        expect(game.score).to eq 300
+      end
+    end
   end
 end

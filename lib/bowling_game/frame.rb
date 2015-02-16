@@ -6,15 +6,15 @@ class Frame
     @rolls = []
   end
 
-  def score(previous_frame = nil)
-    return scored_without_bonus unless previous_frame
+  def score(next_frame = nil)
+    return scored if last?
 
-    if previous_frame.spare?
-      scored_with_spare_bonus
-    elsif previous_frame.strike?
-      scored_with_strike_bonus
+    if strike?
+      scored + next_frame.strike_bonus
+    elsif spare?
+      scored + next_frame.spare_bonus
     else
-      scored_without_bonus
+      scored
     end
   end
 
@@ -26,25 +26,30 @@ class Frame
     strike? || rolls.size == 2
   end
 
+  def last?
+    index == 9
+  end
+
   def strike?
     rolls.first == 10
   end
 
   def spare?
-    rolls.size == 2 && rolls.reduce(:+) == 10
+    rolls.size == 2 && scored == 10
   end
 
-  private
-
-  def scored_without_bonus
+  def scored
     rolls.reduce(:+)
   end
 
-  def scored_with_spare_bonus
-    scored_without_bonus + rolls.first
+  def spare_bonus
+    rolls.first
   end
 
-  def scored_with_strike_bonus
-    scored_without_bonus * 2
+  def strike_bonus
+    return rolls[0..1].reduce(:+) if last? && strike?
+    return scored + 10 if strike?
+
+    scored
   end
 end

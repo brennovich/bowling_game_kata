@@ -14,19 +14,19 @@ class BowlingGame
 
   def current_frame
     if @current_frame.finished?
-      @current_frame = @frames[@current_frame.index + 1]
+      @current_frame = next_frame(@current_frame)
     else
       @current_frame
     end
   end
 
-  def previous_frame(reference = current_frame)
-    return if reference == @frames.first
+  def next_frame(reference = current_frame)
+    return reference if @frames.last == reference
 
-    @frames[reference.index - 1]
+    @frames[reference.index + 1]
   end
 
   def score
-    @score = frames.map { |frame| frame.score previous_frame(frame) }.reduce(:+)
+    @score = frames.map { |frame| frame.score next_frame(frame) }.reduce(:+)
   end
 end
